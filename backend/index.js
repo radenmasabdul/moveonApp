@@ -2,6 +2,8 @@ import express from 'express'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
+import morgan from 'morgan'
 
 import router from "./router/index.js"
 
@@ -14,6 +16,11 @@ const port = 3000
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser())
+
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'))
+}
 
 //endpoint
 app.get('/', (req, res) => {
