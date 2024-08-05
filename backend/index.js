@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser'
 import morgan from 'morgan'
 
 import router from "./router/index.js"
+import { errorHandlers, notFound } from './middlewares/errorHandlers.js'
 
 dotenv.config()
 
@@ -29,6 +30,8 @@ app.get('/', (req, res) => {
 
 //router
 app.use('/api', router);
+app.use(notFound)
+app.use(errorHandlers)
 
 app.listen(port, () => {
     console.log(`Server started on port ${port}`)

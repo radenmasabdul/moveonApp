@@ -1,5 +1,7 @@
-import users from "../../models/auth/users.js"
 import jwt from "jsonwebtoken"
+
+import users from "../../models/auth/users.js"
+import errorResponseHandlers from "../../middlewares/errorResponsehandlers.js"
 
 const signToken = id => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -28,23 +30,15 @@ const createSendToken = (user, statusCode, res) => {
     })
 }
 
-export const registerUser = async (req, res) => {
-    try {
-        const createUsers = await users.create({
-            username: req.body.username,
-            email: req.body.email,
-            password: req.body.password,
-        })
-
-        createSendToken(createUsers, 201, res)
-
-    } catch (error) {
-        return res.status(400).json({
-            messages: "Error",
-            error
-        })
-    }
-}
+export const registerUser = errorResponseHandlers(async (req, res) => {
+    const createUsers = await users.create({
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+    })
+    
+    createSendToken(createUsers, 201, res)
+})
 
 export const loginUser = (req, res) => {
     res.send('Login successful')
