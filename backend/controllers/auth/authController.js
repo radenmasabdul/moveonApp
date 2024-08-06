@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 
 import users from "../../models/auth/users.js"
-import errorResponseHandlers from "../../middlewares/errorResponsehandlers.js"
+import asyncHandlers from "../../middlewares/asyncHandlers.js"
 
 const signToken = id => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -29,17 +29,24 @@ const createSendToken = (user, statusCode, res) => {
     })
 }
 
-export const registerUser = errorResponseHandlers(async (req, res) => {
+export const registerUser = asyncHandlers(async (req, res) => {
+
+    //condition to determine if the document / data is still empty, then the admin role. if it already exists then the user role
+    const isFirstAccount = (await users.countDocuments()) === 0
+
+    const role = isFirstAccount ? "admin" : "user"
+
     const createUsers = await users.create({
         username: req.body.username,
         email: req.body.email,
         password: req.body.password,
+        role,
     })
 
     createSendToken(createUsers, 201, res)
 })
 
-export const loginUser = errorResponseHandlers(async (req, res) => {
+export const loginUser = asyncHandlers(async (req, res) => {
     //validate for email & password cant be empty
     if (!req.body.email && !req.body.password) {
         res.status(400)
