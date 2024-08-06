@@ -25,7 +25,6 @@ const createSendToken = (user, statusCode, res) => {
     user.password = undefined
 
     res.status(statusCode).json({
-        messages: "Registered Successfully",
         data: user
     })
 }
@@ -36,13 +35,28 @@ export const registerUser = errorResponseHandlers(async (req, res) => {
         email: req.body.email,
         password: req.body.password,
     })
-    
+
     createSendToken(createUsers, 201, res)
 })
 
-export const loginUser = (req, res) => {
-    res.send('Login successful')
-}
+export const loginUser = errorResponseHandlers(async (req, res) => {
+    //validate for email & password cant be empty
+    if (!req.body.email && !req.body.password) {
+        res.status(400)
+        throw new Error('Email and Password cannot be empty')
+    }
+
+    //Validate whether the email is registered or not in DB
+    const userData = await users.findOne({
+        email: req.body.email
+    })
+
+    if (userData && (await userData.comparePassword(req.body.password))) {
+        createSendToken(userData, 200, res)
+    } else {
+        throw new Error('Unregistered user')
+    }
+})
 
 export const logoutUser = (req, res) => {
     res.send('Successfully logged out')
