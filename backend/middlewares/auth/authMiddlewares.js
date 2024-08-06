@@ -39,3 +39,15 @@ export const authMiddlewares = async (req, res, next) => {
 
     next()
 }
+
+export const permissionUser = (...roles) => {
+    return (req, res, next) => {
+        if (!roles.includes(req.username.role)) {
+            return next(res.status(403).json({
+                message: "Your role cannot access this page"
+            }))
+        }
+
+        next()
+    }
+}
