@@ -66,9 +66,27 @@ export const loginUser = asyncHandlers(async (req, res) => {
 })
 
 export const logoutUser = (req, res) => {
-    res.send('Successfully logged out')
+    res.cookie('jwt', '', {
+        expire: new Date(0),
+        httpOnly: true,
+        security: false,
+    })
+
+    res.status(200).json({
+        message: "Successfully logged out"
+    })
 }
 
-export const getUser = (req, res) => {
-    res.send('Successfully get user')
+export const getUser = async (req, res) => {
+    const data = await users.findById(req.username.id).select({ password: 0 })
+
+    if (data) {
+        return res.status(200).json({
+            data
+        })
+    }
+
+    return response.status(400).json({
+        messages: "User not found"
+    })
 }
