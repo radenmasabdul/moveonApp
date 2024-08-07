@@ -8,14 +8,10 @@ export default {
     extend: {
       fontFamily: {
         JakartaSans: ["'Plus Jakarta Sans', sans-serif;"],
+        DancingSans: ["'Dancing Script', cursive;"]
       },
     },
   },
-  plugins: [
-    require('daisyui'),
-  ],
-  daisyui: {
-    themes: ["light"],
-  },
+  plugins: [require('daisyui'), ('tailwindcss-primeui')],
 }
 
