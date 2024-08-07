@@ -6,6 +6,7 @@ import { ref, reactive } from "vue";
 
 const user = reactive({
   email: "",
+  username: "",
   password: "",
 });
 
@@ -24,17 +25,19 @@ const togglePasswordVisibility = () => {
     <Card class="sm:mx-auto sm:w-full sm:max-w-md">
       <template #title>
         <div>
-          <img class="mx-auto h-20 w-auto rounded-full" :src="Logo" alt="logo" />
-          <p
-            class="py-2 font-DancingSans text-center text-4xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white"
-          >
-            MoveON
-          </p>
+          <RouterLink to="/">
+            <img class="mx-auto h-20 w-auto rounded-full" :src="Logo" alt="logo" />
+            <p
+              class="py-2 font-DancingSans text-center text-4xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white"
+            >
+              MoveON
+            </p>
+          </RouterLink>
         </div>
         <h2
           class="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 font-JakartaSans dark:text-white"
         >
-          Sign in to your account
+          Register your account
         </h2>
       </template>
 
@@ -43,6 +46,11 @@ const togglePasswordVisibility = () => {
           <div class="flex flex-col gap-2">
             <label for="email" class="font-JakartaSans">Email</label>
             <InputText id="email" autocomplete="on" v-model="user.email" />
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label for="username" class="font-JakartaSans">Username</label>
+            <InputText id="username" autocomplete="on" v-model="user.username" />
           </div>
 
           <div class="flex flex-col gap-2">
@@ -67,26 +75,9 @@ const togglePasswordVisibility = () => {
           </div>
 
           <div>
-            <Button label="Sign In" severity="success" class="w-full" />
-          </div>
-
-          <div>
-            <RouterLink to="/forgot">
-              <p
-                class="text-sm font-medium font-JakartaSans leading-6 text-indigo-600 hover:text-indigo-500 dark:text-white"
-              >
-                Forgot your password?
-              </p>
-            </RouterLink>
+            <Button label="Register" severity="success" class="w-full" />
           </div>
         </form>
-      </template>
-
-      <template #footer>
-        <Divider type="solid" />
-        <RouterLink to="/register">
-          <Button label="Register" severity="info" class="w-full" />
-        </RouterLink>
       </template>
     </Card>
   </main>
